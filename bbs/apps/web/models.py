@@ -1,11 +1,13 @@
 #_*_coding:utf-8_*_
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 # Create your models here.
 
 class Article(models.Model):
     '''帖子表'''
     title = models.CharField(u'文章标题',max_length=255,unique=True)
+    slug = models.SlugField("slug", max_length=50, unique=True, help_text="根据title生成的，用于生成页面url，必须唯一")
     category = models.ForeignKey("category",verbose_name=u'版块')
     head_img = models.ImageField(upload_to="uploads")
     content = models.TextField(u'文章内容')
@@ -15,7 +17,11 @@ class Article(models.Model):
     priority = models.IntegerField(u'优先级',default=1000)
 
     def __str__(self):
-        return "<%s,author:%s>" %(self.title,self.author)
+        return "<%s>" %(self.title)
+
+    def get_absolute_url(self):
+        return reverse('title', args=(self.slug,))
+
 class Comment(models.Model):
     '''存储所有评论'''
     article = models.ForeignKey("Article")
