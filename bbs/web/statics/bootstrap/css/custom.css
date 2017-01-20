@@ -1,0 +1,17 @@
+
+.left-content-panel{
+    border: 1px solid #b9d2dc;
+}
+.right-sidebar{
+    border: 1px solid lightsteelblue;
+}
+.article-box{
+    margin-bottom: 40px;
+}
+.article-head-img img{
+    height: 125px;
+    width: 220px;
+}
+.article-summary{
+    margin-left: 50px;
+}

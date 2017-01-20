@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import *
+from . import models
 from .forms import *
 from django.core.urlresolvers import reverse
 
 # Register your models here.
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'author', 'head_img', 'content', 'publish_date', 'hidden', 'priority',)
+    list_display = ('title', 'category', 'author', 'publish_date', 'hidden', 'priority',)
     list_display_links = ('title', 'category', 'author')
     list_per_page = 50
     ordering = ['publish_date']
@@ -22,7 +22,12 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('id', 'name', 'admin', )
+    list_display_links = ('name', 'admin',)
+    list_per_page = 50
+    search_fields = ['id', 'name', 'admin',]
+    exclude = []
+    prepopulated_fields = {'slug': ('name',), }
 
 
 @admin.register(UserGroup)

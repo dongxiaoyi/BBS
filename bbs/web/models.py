@@ -10,6 +10,7 @@ class Article(models.Model):
     slug = models.SlugField("slug", max_length=50, unique=True, help_text="根据title生成的，用于生成页面url，必须唯一")
     category = models.ForeignKey("category",verbose_name=u'版块')
     head_img = models.ImageField(upload_to="uploads")
+    summary = models.CharField(max_length=255)
     content = models.TextField(u'文章内容')
     author = models.ForeignKey("UserProfile")
     publish_date = models.DateTimeField(auto_now=True)
@@ -49,9 +50,13 @@ class UserProfile(models.Model):
 class Category(models.Model):
     '''帖子版块'''
     name = models.CharField(max_length=64,unique=True)
+    slug = models.SlugField("slug", max_length=50, unique=True, help_text="根据name生成的，用于生成页面url，必须唯一")
     admin = models.ForeignKey("UserProfile")
+
     def __str__(self):
         return self.name
+    def get_absolute_url(self):
+        return reverse('name', args=(self.slug,))
 class UserGroup(models.Model):
     '''用户组'''
     name = models.CharField(max_length=64,unique=True)

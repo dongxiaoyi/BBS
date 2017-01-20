@@ -22,6 +22,8 @@ sys.path.append('..')
 from web import views
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', views.index),
+    url(r'^$', views.index,name='index'),
+    url(r'^category/(\d+)/$', views.category,name='category'),
+    url(r'^article/(\d+)/$', views.article_detail, name='article_detail'),
 ]+ static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
 
