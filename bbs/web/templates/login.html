@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+{% block title_link %}
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/static/bootstrap/css/login.css" rel="stylesheet">
+
+{% endblock %}
+{% block page-container %}
+ <form class="form-signin" role="form" action="{% url 'login' %}" method="post">{% csrf_token %}
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input type="text" id="" name="username" class="form-control" placeholder=用户名 required autofocus>
+        <input type="password" name="password" class="form-control" placeholder="密码" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <p style="color: red">{{ err_msg }}</p>
+      </form>
+{% endblock %}

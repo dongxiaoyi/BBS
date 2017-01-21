@@ -1,0 +1,36 @@
+{% extends 'index.html' %}
+{% block head_css %}
+<!--引入wangEditor.css-->
+<link rel="stylesheet" type="text/css" href="/static/plugins/wangEditor/dist/css/wangEditor.min.css">
+{% endblock %}
+{% block head_js %}
+{% endblock %}
+{% block page-container %}
+         <div class="new_article">
+             <form enctype="multipart/form-data" method="post" action="{% url 'new_article' %}">{% csrf_token %}
+              <input type="text" class="form-control" placeholder="文章标题">
+                 <select name ='category_id' class="form-control">
+                     {% for category in category_list %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                     {% endfor %}
+                 </select>
+              <input type="text" class="form-control" placeholder="一句话简介">
+              <input type="file" name='head_img'>必选文章标题图片
+              <br>
+                 <div style="width:90%">
+                     <div id="div1" style="height:300px;">
+                        <p>请输入内容...</p>
+                     </div>
+                 </div>
+            </form>
+        </div>
+{% endblock %}
+{% block bottom-js %}
+
+<script type="text/javascript" src="/static/plugins/wangEditor/dist/js/wangEditor.min.js"></script>
+<!--这里引用jquery和wangEditor.js-->
+<script type="text/javascript">
+    var editor = new wangEditor('div1');
+    editor.create();
+</script>
+{% endblock %}
