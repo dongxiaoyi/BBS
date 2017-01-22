@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <!-- saved from url=(0048)http://v3.bootcss.com/examples/navbar-fixed-top/ -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <q></q>
+<meta charset="UTF-8"> <!-- for HTML5 -->
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
@@ -45,7 +46,6 @@
             <li><a href="{% url 'index' %}">综合区</a></li>
             <li><a href="{% url 'category' 4 %}">Django</a></li>
             <li><a href="{% url 'category' 5 %}">Linux</a></li>
-
           </ul>
           <ul class="nav navbar-nav navbar-right">
               {% if request.user.is_authenticated %}
@@ -75,10 +75,10 @@
                 <div class="row">
                     <div class="col-md-8 left-content-panel">
                         <div class="content-box row">
-                            {% for article in articles %}
+                            {% for article in articles reversed %}
                                 <div class="article-box row">
                                     <div class="col-md-3 article-head-img">
-                                        <img src="/static/imgs/upload/article.jpg">
+                                        <img src="{{ article.head_img }}">
                                     </div>
                                     <div class="col-md-8 article-summary">
                                         <h3><a href="{% url 'article_detail' article.id %}">{{ article.title }}</a></h3>
@@ -93,7 +93,7 @@
                                         <p>{{ article.summary }}</p>
                                     </div>
                                 </div>
-                            <hr/>
+
                             {% endfor %}
                         </div>
                     </div>

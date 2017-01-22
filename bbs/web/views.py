@@ -1,7 +1,10 @@
+#_*_coding:utf-8_*_
+from .models import Article
 from django.shortcuts import render,HttpResponse,HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate,login,logout
-import sys
+from .forms import ArticleForm,handle_upload_file
+import sys,os
 sys.path.append('..')
 from web.models import Article,Category
 # Create your views here.
@@ -34,5 +37,30 @@ def acc_login(request):
             err_msg = "Wrong username or password"
     return render(request,'login.html',{'err_msg':err_msg})
 def new_article(request):
+            if request.method == 'POST':
+                form = ArticleForm(request.POST,request.FILES)
+                print("form: %s"%form)
+                if form.is_valid():
+                    form_data = form.cleaned_data
+                    form_data['author_id'] = request.user.userprofile.id
+                    #文件上传句柄：
+                    file_obj = request.FILES.get('head_img')
+                    base_img_upload_path = 'statics/imgs/upload'
+                    user_path = "%s/%s" % (base_img_upload_path, request.user.userprofile.id)
+                    print("句柄%s"%file_obj)
+                    if not os.path.isdir(user_path):
+                        os.mkdir(user_path)
+                    elif os.path.isdir(user_path):
+                        upload_file = ("%s/%s"%(user_path,file_obj.head_img
+                        with open(upload_file, 'wb+') as destination:
+                            for chunk in file_obj.chunks():
+                                destination.write(chunk)
+                                form_data['head_img'] = upload_file
+                                new_article_obj = Article(**form_data)
+                                new_article_obj.save()
+                return render(request,'new_article.html',{'file_obj':file_obj.name})
+            else:
+                print("err:no post")
+
     category_list = Category.objects.all()
     return render(request,'new_article.html',{'category_list':category_list})

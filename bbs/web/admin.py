@@ -1,5 +1,6 @@
 from django.contrib import admin
 from . import models
+from .models import *
 from .forms import *
 from django.core.urlresolvers import reverse
 
@@ -12,7 +13,6 @@ class ArticleAdmin(admin.ModelAdmin):
     ordering = ['publish_date']
     search_fields = ['title', 'category', 'author', 'content']
     exclude = ['publish_date', ]
-    prepopulated_fields = {'slug': ('title',), }
 
 
 @admin.register(Comment)
