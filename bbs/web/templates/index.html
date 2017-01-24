@@ -78,7 +78,7 @@
                             {% for article in articles reversed %}
                                 <div class="article-box row">
                                     <div class="col-md-3 article-head-img">
-                                        <img src="{{ article.head_img }}">
+                                        <img src="/static/imgs/upload/{{ article.head_img }}">
                                     </div>
                                     <div class="col-md-8 article-summary">
                                         <h3><a href="{% url 'article_detail' article.id %}">{{ article.title }}</a></h3>
@@ -93,7 +93,6 @@
                                         <p>{{ article.summary }}</p>
                                     </div>
                                 </div>
-
                             {% endfor %}
                         </div>
                     </div>
@@ -117,6 +116,8 @@
            $(menu).parent().addClass("active");
            $(menu).parent().siblings().removeClass("active");
             });
+    </script>
+    <script>
     </script>
   {% block bottom-js %}
   {% endblock %}

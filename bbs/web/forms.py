@@ -1,6 +1,10 @@
 #_*_coding:utf-8_*_
 from django import forms
-import os,subprocess
+from django.shortcuts import render,HttpResponse,HttpResponseRedirect
+import os,subprocess,time
+import sys,os
+sys.path.append('..')
+from bbs import settings
 class ArticleForm(forms.Form):
     title = forms.CharField(max_length=255,min_length=5)
     summary = forms.CharField(max_length=255,min_length=5)
@@ -8,18 +12,15 @@ class ArticleForm(forms.Form):
     content = forms.CharField(min_length=10)
     category_id = forms.IntegerField()
 
-def handle_upload_file(request,f):
-    print(f.name)
-    base_img_upload_path = './statics/imgs/upload/'
-    user_path = "%s%s" % (base_img_upload_path,str(request.user.userprofile.id))
-    print(user_path)
-    if not os.path.isdir(user_path):
-        create_menu(user_path)
-    with open('%s/%s' % (user_path,f.name),'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
-        destination.close()
-    return "/tatics/imgs/upload/%s/%s" % (request.user.userprofile.id,f.name)
-def create_menu(path):
-    os.mkdir(path)
+def handle_upload(request,file):
+    user_path = 'web/statics/imgs/upload/%s' % (request.user.userprofile.id)
+    if not os.path.exists(user_path):
+        os.mkdir(user_path)
+    upload_file = "web/statics/imgs/upload/%s/%s" % (request.user.userprofile.id,file.name)
+    with open(upload_file, 'wb+') as new_file:
+        for chunk in file.chunks():
+            new_file.write(chunk)
+    #return 'statics/imgs/upload/%s/%s' %(request.user.userprofile.id,file.name)
+    #return '/static/%s/%s' %(request.user.userprofile.id,file.name)
+
 

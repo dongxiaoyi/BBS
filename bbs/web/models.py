@@ -28,7 +28,7 @@ class Comment(models.Model):
     '''层级评论(自关联)'''
     parent_comment = models.ForeignKey('self',related_name='p_comment',blank=True,null=True)
     def __str__(self):
-        return "<%s,user:%s>" %(self.title,self.user)
+        return "<user:%s>" %self.user
 class ThumbUp(models.Model):
     '''点赞'''
     article = models.ForeignKey("Article")

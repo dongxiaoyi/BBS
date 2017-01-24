@@ -15,3 +15,8 @@
 .article-summary{
     margin-left: 40px;
 }
+.comment-node{
+     border: 2px dashed #28a4c9;
+     border-top: 0px;
+     margin-bottom: 10px;
+}

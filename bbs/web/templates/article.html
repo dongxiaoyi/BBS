@@ -1,8 +1,14 @@
 {% extends 'index.html' %}
+{% load custom_tags %}
 {% block page-container %}
-    <div class="article-detail">
+    <div class="article-detail" id="no">
         <h4>{{ article_obj.title }}</h4>
 
         <h4>{{ article_obj.content|safe }}</h4>
+        <hr/>
+        {% autoescape off %}
+        {% build_comment_tree article_obj.comment_set.select_related %}
+        {% endautoescape %}
     </div>
+
 {% endblock %}
