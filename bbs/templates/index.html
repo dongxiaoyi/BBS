@@ -1,0 +1,145 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>sk-bbs</title>
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block head-dashboard-js %}
+{% endblock %}
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/jquery.mobile.flatui.css" />
+    <link href="/static/bootstrap/css/custom.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/wangEditor.min.css">
+{% block head_css %}
+{% endblock %}
+    <script src="/static/bootstrap/js/ie-emulation-modes-warning.js"></script>
+{% block head-js %}
+{% endblock %}
+{% block head-add %}
+{% endblock %}
+</head>
+<body>
+
+<div data-role="page">
+	<div data-role="header" class="header linear-g">
+        <a href="#panel-left" data-iconpos="notext" class="glyphicon glyphicon-th-large col-xs-2 text-right"> </a>
+        <a class="text-center col-xs-8">sk-bbs.com</a>
+        <a href="#panel-right" data-iconpos="notext" class="glyphicon glyphicon-user col-xs-2 text-left"> </a>
+    </div>
+    <div data-role="panel" data-position="left" data-display="push" class="list-group shortcut_menu dn linear-g" id="panel-left">
+        <a href="{% url 'index' %}" class="list-group-item"><span class="glyphicon glyphicon-home"> </span> &nbsp;综合区</a>
+        <a href="{% url 'category' 4 %}" class="list-group-item"><span class="glyphicon glyphicon-list"> </span> &nbsp;Linux</a>
+        <a href="{% url 'category' 5 %}" class="list-group-item"><span class="glyphicon glyphicon-list"> </span> &nbsp;Django</a>
+        <a href="{% url 'web_chat' %}" class="list-group-item"><span class="glyphicon glyphicon-list-alt"> </span> &nbsp;聊天室</a>
+    </div>
+    {% block page-login %}
+    <div data-role="panel" data-position="right" data-display="push" class="user_box text-center dn linear-g" id="panel-right">
+        <div class="u_info">
+            <img class="avatar" src="/static/imgs/chat_imgs/avatar.png" alt="头像">
+            {% if request.user.is_authenticated %}
+            <span class="username">{{ request.user.userprofile.name }}</span>
+            {% else %}
+            <li><a href="{% url 'login' %}">注册/登录</a></li>
+            {% endif %}
+        </div>
+        {% if request.user.is_authenticated %}
+        <ul class="user_menu">
+          <li class="menu"><a href="{% url 'new_article' %}"><span class="glyphicon glyphicon-picture"> </span> &nbsp;发 帖</a></li>
+          <li class="menu"><a href="#"><span class="glyphicon glyphicon-cog"> </span> &nbsp;基本设置</a></li>
+          <li class="menu"><a href="#"><span class="glyphicon glyphicon-lock"> </span> &nbsp;修改密码</a></li>
+          <li class="menu"><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-off"> </span> &nbsp;安全退出</a></li>
+        </ul>
+        {% else %}
+<hr/>
+        {% endif %}
+    </div>
+    {% endblock %}
+<div data-role="content" class="container" role="main">
+        <ul class="content-reply-box mg10">
+
+            {% block page-container %}
+                <div class="row">
+                    <div class="col-md-8 left-content-panel">
+                        <div class="content-box row">
+                            {% for article in articles reversed %}
+                                <div class="article-box row">
+                                    <div class="col-md-3 article-head-img">
+                                        <img src="/static/imgs/upload/{{ article.head_img }}">
+                                    </div>
+                                    <div class="col-md-8 article-summary">
+                                        <h3><a href="{% url 'article_detail' article.id %}">{{ article.title }}</a></h3>
+                                        <div class="article-attr">
+                                            <ul class="list-inline">
+                                                <li>{{ article.author.name }}</li>
+                                                <li>{{ article.publish_date }}</li>
+                                                <li>赞：{{ article.thumbup_set.select_related.count }}</li>
+                                                <li>评论数：{{ article.comment_set.select_related.count }}</li>
+                                            </ul>
+                                        </div>
+                                        <p>{{ article.summary }}</p>
+                                        <div class="tree" id="content" style="width:auto; height: auto;margin-left:0px;margin-top:20px">
+                                        	<div class="wrap">
+                                        		<div class="comment">
+                                        			<div class="head-face">
+                                        				<img src="/static/imgs/images/1.jpg" >
+                                        				<p></p>
+                                        			</div>
+                                        			<div class="content">
+                                        				<div class="cont-box">
+                                        					<textarea class="text" placeholder="请输入..."></textarea>
+                                        				</div>
+                                        				<div class="tools-box">
+                                        					<div class="operator-box-btn"><span class="face-icon"  >☺</span><span class="img-icon">▧</span></div>
+                                        					<div class="submit-btn"><input type="button" onClick="out()"value="提交评论" /></div>
+                                        				</div>
+                                        			</div>
+                                        		</div>
+                                        		<div id="info-show">
+                                        			<ul></ul>
+                                        		</div>
+                                        	</div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-4 right-sidebar">
+                        right
+                    </div>
+                </div>
+            {% endblock %}
+            </ul>
+        </div>
+
+</ul>
+</div>
+<script type="text/javascript" src="/static/bootstrap/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/bootstrap/js/jquery.mobile-1.4.0-rc.1.js"></script>
+<script type="text/javascript">
+	$(function(){
+		/*
+		** 不同页面切换转场效果
+		** $.mobile.changePage ('/test.html', 'slide/pop/fade/slideup/slidedown/flip/none', false, false);
+		*/
+		$('.list-group-item,.menu a').click(function(){
+			$.mobile.changePage($(this).attr('href'), {
+				transition : 'flip', //转场效果
+				reverse : true       //默认为false,设置为true时将导致一个反方向的转场
+			});
+		});
+	});
+</script>
+  {% block bottom-js %}
+  {% endblock %}
+<script type="text/javascript" src="/static/bootstrap/js/wangEditor.min.js"></script>
+<script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+</html>

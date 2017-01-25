@@ -4,10 +4,9 @@ from django.shortcuts import render,HttpResponse,HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate,login,logout
 from .forms import ArticleForm,handle_upload
-import sys,os
-sys.path.append('..')
-from web.models import Article,Category
-from bbs import settings
+
+from .models import Article,Category
+#from bbs import settings
 # Create your views here.
 def index(request):
     articles = Article.objects.all()

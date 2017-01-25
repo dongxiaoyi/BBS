@@ -41,6 +41,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User,)
     name = models.CharField(max_length=32)
     groups = models.ForeignKey("UserGroup")
+    friends = models.ManyToManyField("self",related_name='my_friends')
     def __str__(self):
         return self.name
 class Category(models.Model):

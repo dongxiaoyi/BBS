@@ -1,0 +1,46 @@
+{% extends 'index.html' %}
+{% block head_css %}
+<!--引入wangEditor.css-->
+<link rel="stylesheet" type="text/css" href="/static/plugins/wangEditor/dist/css/wangEditor.min.css">
+{% endblock %}
+{% block head_js %}
+{% endblock %}
+{% block page-container %}
+         <div class="new_article">
+             {% if new_article_obj %}
+                <h3>文章<{{ new_article_obj.title }}>已发布,<a href="{% url 'article_detail' new_article_obj.id %}">点我查看</a>></h3>
+             {% else %}
+             <form enctype="multipart/form-data" method="post" action="{% url 'new_article' %}">{% csrf_token %}
+              <input name="title" type="text" class="form-control" placeholder="文章标题">
+                    <select name ='category_id' class="form-control">
+                     {% for category in category_list %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                     {% endfor %}
+                    </select>
+                <input name="summary" type="text" class="form-control" placeholder="一句话简介">
+                <div class="form-group">
+                     <label for="exampleInputFile">File input</label>
+                <input type="file" id="exampleInputFile" name="head_img">
+                <p class="help-block">必选图片</p>
+                </div>
+                 <textarea id="textarea1" name="content" rows="10" style="height: 200px">
+                    <p>请输入内容...</p>
+                </textarea>
+              <button type="submit" class="btn btn-success pull-right">提交</button>
+            </form>
+            {% endif %}
+        </div>
+{% endblock %}
+{% block bottom-js %}
+<script type="text/javascript" src="/static/plugins/wangEditor/dist/js/wangEditor.min.js"></script>
+<!--这里引用jquery和wangEditor.js-->
+<script type="text/javascript">
+    // 获取元素
+    var textarea = document.getElementById('textarea1');
+    // 生成编辑器
+    var editor = new wangEditor(textarea);
+    editor.config.codeDefaultLang = 'javascript'
+
+    editor.create();
+</script>
+{% endblock %}

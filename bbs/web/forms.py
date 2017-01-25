@@ -13,10 +13,10 @@ class ArticleForm(forms.Form):
     category_id = forms.IntegerField()
 
 def handle_upload(request,file):
-    user_path = 'web/statics/imgs/upload/%s' % (request.user.userprofile.id)
+    user_path = 'statics/imgs/upload/%s' % (request.user.userprofile.id)
     if not os.path.exists(user_path):
         os.mkdir(user_path)
-    upload_file = "web/statics/imgs/upload/%s/%s" % (request.user.userprofile.id,file.name)
+    upload_file = "statics/imgs/upload/%s/%s" % (request.user.userprofile.id,file.name)
     with open(upload_file, 'wb+') as new_file:
         for chunk in file.chunks():
             new_file.write(chunk)

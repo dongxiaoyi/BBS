@@ -35,5 +35,4 @@ def build_comment_tree(comment_list):
         html += "<div class='comment-node'>" + k.comment + "</div>"
         html += generate_comment_html(v,margin_left+15)
     html += "</div>"
-    print(html)
     return html

@@ -1,0 +1,33 @@
+{% extends 'index.html' %}
+{% block title_link %}
+<link href="/static/bootstrap/css/login.css" rel="stylesheet"/>
+<link rel="stylesheet" href="/static/bootstrap/css/font-awesome.css"/>
+<link rel="stylesheet" href="/static/bootstrap/css/build.css"/>
+{% endblock %}
+{% block head-js %}
+{% endblock %}
+{% block page-login %}
+    <div data-role="panel" data-position="right" data-display="push" class="user_box text-center dn linear-g" id="panel-right">
+        <div class="u_info">
+            <img class="avatar" src="/static/imgs/chat_imgs/avatar.png" alt="头像">
+        </div>
+        <ul class="user_menu">
+          <li><a href="{% url 'login' %}">注册/登录</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block page-container %}
+ <form class="form-signin" role="form" action="{% url 'login' %}" method="post">{% csrf_token %}
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input type="text" id="" name="username" class="form-control" placeholder=用户名 required autofocus>
+        <input type="password" name="password" class="form-control" placeholder="密码" required>
+        <div class="checkboxstyle checkbox-info checkbox-circle">
+          <input id="checkbox8" type="checkbox" checked>
+            <label for="checkbox8">
+             记住我
+            </label>
+            </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <p style="color: red">{{ err_msg }}</p>
+      </form>
+{% endblock %}
