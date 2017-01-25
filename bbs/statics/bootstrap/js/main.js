@@ -1,44 +1,97 @@
-(function($) {
-    $.fn.extend({
-        insertContent: function(myValue, t) {
-            var $t = $(this)[0];
-            if (document.selection) { //ie
-                this.focus();
-                var sel = document.selection.createRange();
-                sel.text = myValue;
-                this.focus();
-                sel.moveStart('character', -l);
-                var wee = sel.text.length;
-                if (arguments.length == 2) {
-                    var l = $t.value.length;
-                    sel.moveEnd("character", wee + t);
-                    t <= 0 ? sel.moveStart("character", wee - 2 * t - myValue.length) : sel.moveStart("character", wee - t - myValue.length);
-  
-                    sel.select();
-                }
-            } else if ($t.selectionStart || $t.selectionStart == '0') {
-                var startPos = $t.selectionStart;
-                var endPos = $t.selectionEnd;
-                var scrollTop = $t.scrollTop;
-                $t.value = $t.value.substring(0, startPos) + myValue + $t.value.substring(endPos, $t.value.length);
-                this.focus();
-                $t.selectionStart = startPos + myValue.length;
-                $t.selectionEnd = startPos + myValue.length;
-                $t.scrollTop = scrollTop;
-                if (arguments.length == 2) {
-                    $t.setSelectionRange(startPos - t, $t.selectionEnd + t);
-                    this.focus();
-                }
-            }
-            else {
-                this.value += myValue;
-                this.focus();
-            }
-        }
-    })
-})(jQuery);
+/*====================================================
+  TABLE OF CONTENT
+  1. function declearetion
+  2. Initialization
+====================================================*/
+
+/*===========================
+ 1. function declearetion
+ ==========================*/
+var themeApp = {
+	featuredMedia: function(){
+		$(".post").each(function() {
+			var thiseliment = $(this);
+			var media_wrapper = $(this).find('featured');
+			var media_content_image = media_wrapper.find($('img'));
+			var media_content_embeded = media_wrapper.find('iframe');
+			if (media_content_image.length > 0) {
+				$(media_content_image).insertAfter(thiseliment.find('.post-head')).wrap("<div class='featured-media'></div>");
+				thiseliment.addClass('post-type-image');
+				media_wrapper.remove();
+			}
+			else if (media_content_embeded.length > 0) {
+				$(media_content_embeded).insertAfter(thiseliment.find('.post-head')).wrap("<div class='featured-media'></div>");
+				thiseliment.addClass('post-type-embeded');
+			}
+		});
+	},
+	responsiveIframe: function() {
+		$('.post').fitVids();
+	},
+	sidebarConfig:function() {
+		if(sidebar_left == true) {
+			$('.main-content').addClass('col-md-push-4');
+			$('.sidebar').addClass('col-md-pull-8');
+		}
+	},
+	recentPost:function() {
+		var feed_url = "/rss/";
+		var code = String('');
+		$.get(feed_url, function(data) {
+			$(data).find('item').slice(0,recent_post_count).each(function(){
+				var full = $(this).find('description').text();
+				var content = $(this).contentSnippet;
+				var link = $(this).find('link').text();
+				var title = $(this).find('title').text();
+				var published_date = $(this).find('pubDate').text();
+				function format_date (dt) {
+					var d = new Date(dt);
+					var month_name = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+					var month = month_name[d.getMonth()];
+					var date = d.getDate();
+					var year = d.getFullYear();
+					var formatted_dt = month+' '+date+','+' '+year;
+					return formatted_dt;
+				}
+				code += '<div class="recent-single-post">';
+				code += '<a href="' + link + '" class="post-title">' + title + '</a><div class="date">' + format_date(published_date) + '</div>';
+				code += '</div>';
+			})
+			$(".recent-post").html(code);
+		});
+	},
+	highlighter: function() {
+		$('pre code').each(function(i, block) {
+		    hljs.highlightBlock(block);
+		  });
+	},
+	backToTop: function() {
+		$(window).scroll(function(){
+			if ($(this).scrollTop() > 100) {
+				$('#back-to-top').fadeIn();
+			} else {
+				$('#back-to-top').fadeOut();
+			}
+		});
+		$('#back-to-top').on('click', function(e){
+			e.preventDefault();
+			$('html, body').animate({scrollTop : 0},1000);
+			return false;
+		});
+	},
+	init: function() {
+		themeApp.featuredMedia();
+		themeApp.responsiveIframe();
+		// themeApp.sidebarConfig();
+		// themeApp.recentPost();
+		themeApp.highlighter();
+		themeApp.backToTop();
+	}
+}
+
+/*===========================
+2. Initialization
+==========================*/
 $(document).ready(function(){
-	$(".img-icon").click(function(){
-		$(".cont-box .text").insertContent('<img src="请在这里输入图片地址" alt=""/>', -10);
-	});
+  themeApp.init();
 });
